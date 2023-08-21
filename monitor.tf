@@ -1,5 +1,5 @@
 resource "azurerm_log_analytics_workspace" "law" {
-  name                = "fw-law"
+  name                = "firewall-log-analytics-workspace"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   sku                 = "PerGB2018"
@@ -38,18 +38,6 @@ resource "azurerm_monitor_diagnostic_setting" "fw" {
       }
     }
   }
-
-  dynamic "enabled_log" {
-    for_each = data.azurerm_monitor_diagnostic_categories.fw.log_category_groups
-    content {
-      category_group = enabled_log.value
-
-      retention_policy {
-        enabled = true
-        days    = 7
-      }
-    }
-  }
 }
 
 resource "random_uuid" "firewall_workbook" {
@@ -62,5 +50,6 @@ resource "azurerm_application_insights_workbook" "firewall_workbook" {
   display_name        = "Azure Firewall Workbook"
   source_id           = lower(azurerm_log_analytics_workspace.law.id)
   category            = "workbook"
-  data_json           = jsonencode(templatefile("./workbooks/AzureFirewallWorkbookTemplate.json", { workbookSourceId = azurerm_log_analytics_workspace.law.id }))
+
+  data_json = jsonencode(templatefile("./workbooks/AzureFirewallWorkbookTemplate.json", { workbookSourceId = azurerm_log_analytics_workspace.law.id }))
 }

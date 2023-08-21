@@ -41,6 +41,5 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_firewall_diagnostic_categories"></a> [firewall\_diagnostic\_categories](#output\_firewall\_diagnostic\_categories) | Diagnostic categories details on Azure firewall resource. |
 | <a name="output_firewall_public_ip"></a> [firewall\_public\_ip](#output\_firewall\_public\_ip) | The Public IP Address associated to the firewall. |
 <!-- END_TF_DOCS -->
