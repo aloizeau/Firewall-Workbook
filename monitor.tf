@@ -3,7 +3,7 @@ resource "azurerm_log_analytics_workspace" "law" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   sku                 = "PerGB2018"
-  retention_in_days   = 30
+  retention_in_days   = var.retention_in_days
 }
 
 data "azurerm_monitor_diagnostic_categories" "fw" {
@@ -18,12 +18,7 @@ resource "azurerm_monitor_diagnostic_setting" "fw" {
   dynamic "metric" {
     for_each = data.azurerm_monitor_diagnostic_categories.fw.metrics
     content {
-      category = metric.value
-
-      retention_policy {
-        enabled = true
-        days    = 7
-      }
+      category = metric.value      
     }
   }
 
@@ -31,11 +26,6 @@ resource "azurerm_monitor_diagnostic_setting" "fw" {
     for_each = data.azurerm_monitor_diagnostic_categories.fw.log_category_types
     content {
       category = enabled_log.value
-
-      retention_policy {
-        enabled = true
-        days    = 7
-      }
     }
   }
 }
